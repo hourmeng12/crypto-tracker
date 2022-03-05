@@ -6,7 +6,7 @@ export const cryptoApi = createApi({
     baseUrl: 'https://api.coingecko.com/api/v3/',
   }),
   endpoints: (builder) => ({
-    getCrytoMarket: builder.query({
+    getCryptoMarket: builder.query({
       query: (page) =>
         `coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=${page}&sparkline=false&price_change_percentage=1h%2C24h%2C7d`,
     }),
@@ -16,4 +16,4 @@ export const cryptoApi = createApi({
   }),
 });
 
-export const { useGetCrytoMarketQuery, useGetGlobalDataQuery } = cryptoApi;
+export const { useGetCryptoMarketQuery, useGetGlobalDataQuery } = cryptoApi;
