@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useColorModeValue } from '@chakra-ui/color-mode';
+import { Box } from '@chakra-ui/layout';
+import Content from './components/Content';
+import Global from './components/Global';
+import Header from './components/Header';
 
 function App() {
+  const bg = useColorModeValue('white', 'gray.900');
+  const contentBg = useColorModeValue(
+    'linear(to-b, gray.50 0%, white 2%)',
+    'linear(to-b, gray.800 0%, gray.900 2%)'
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Box bg={bg}>
+        <Global />
+        <Header />
+      </Box>
+      <Box bgGradient={contentBg}>
+        <Content />
+      </Box>
+    </>
   );
 }
 
