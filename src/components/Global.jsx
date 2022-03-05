@@ -3,7 +3,7 @@ import { Flex, HStack, Text } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode';
-import { useGetGlobalDataQuery } from '../services/crypto';
+import { useGetGlobalDataQuery } from '../services/cryptoApi';
 import { Skeleton } from '@chakra-ui/skeleton';
 
 const Global = () => {

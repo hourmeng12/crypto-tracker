@@ -3,9 +3,9 @@ import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Spinner, Center, Skeleton, SkeletonText } from '@chakra-ui/react';
 import { Heading, Stack, Text } from '@chakra-ui/layout';
 import {
-  useGetCrytoMarketQuery,
+  useGetCryptoMarketQuery,
   useGetGlobalDataQuery,
-} from '../services/crypto';
+} from '../services/cryptoApi';
 import { useBreakpointValue } from '@chakra-ui/media-query';
 import { usePagination } from '@ajna/pagination';
 import Pagination from './CryptoPagination';
@@ -30,7 +30,7 @@ const Content = () => {
     data: cryptos,
     isFetching,
     isLoading,
-  } = useGetCrytoMarketQuery(currentPage);
+  } = useGetCryptoMarketQuery(currentPage);
   const { data: global, isLoading: isGlobalDataLoading } =
     useGetGlobalDataQuery();
 
