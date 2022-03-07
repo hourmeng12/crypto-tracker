@@ -1,26 +1,14 @@
-import { useColorModeValue } from '@chakra-ui/color-mode';
-import { Box } from '@chakra-ui/layout';
-import Content from './components/Content';
-import Global from './components/Global';
-import Header from './components/Header';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './routes/Home';
 
 function App() {
-  const bg = useColorModeValue('white', 'gray.900');
-  const contentBg = useColorModeValue(
-    'linear(to-b, gray.50 0%, white 2%)',
-    'linear(to-b, gray.800 0%, gray.900 2%)'
-  );
-
   return (
-    <>
-      <Box bg={bg}>
-        <Global />
-        <Header />
-      </Box>
-      <Box bgGradient={contentBg}>
-        <Content />
-      </Box>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+      </Route>
+    </Routes>
   );
 }
 

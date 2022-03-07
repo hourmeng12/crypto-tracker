@@ -10,7 +10,7 @@ import {
   Skeleton,
   Hide,
 } from '@chakra-ui/react';
-import { Box, Flex, Stack, Text } from '@chakra-ui/layout';
+import { Box, Flex, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { formatNumber } from '../helpers';
 
@@ -29,7 +29,7 @@ const CryptoList = ({ cryptos, isFetching }) => {
                 <Text as="span">#</Text>
               </Th>
             </Hide>
-            <Th bg={bg} pos="sticky" left={[0, 0, '38px']} minW="8.75rem">
+            <Th bg={bg} pos="sticky" left={[0, 0, '38px']} minW="9.5rem">
               Name
             </Th>
             <Th isNumeric>Price</Th>
@@ -43,20 +43,20 @@ const CryptoList = ({ cryptos, isFetching }) => {
         </Thead>
         <Tbody>
           {cryptos.map((crypto, index) => {
-            const marketCapRank = crypto?.market_cap_rank ?? 0;
+            const marketCapRank = crypto?.market_cap_rank ?? '?';
             const image = crypto?.image.replace('/large/', '/thumb/');
             const name = crypto?.name ?? '';
             const symbol = crypto?.symbol ?? '';
             const currentPrice = crypto?.current_price ?? 0;
             const oneHPercentage =
-              crypto?.price_change_percentage_1h_in_currency ?? 0;
+              crypto?.price_change_percentage_1h_in_currency;
             const twentyFourHPercentage =
-              crypto?.price_change_percentage_24h_in_currency ?? 0;
+              crypto?.price_change_percentage_24h_in_currency;
             const sevenDayPercentage =
-              crypto?.price_change_percentage_7d_in_currency ?? 0;
-            const marketCap = crypto?.market_cap ?? 0;
-            const totalVol = crypto?.total_volume ?? 0;
-            const totalCirculatingSupply = crypto.circulating_supply ?? 0;
+              crypto?.price_change_percentage_7d_in_currency;
+            const marketCap = crypto?.market_cap;
+            const totalVol = crypto?.total_volume;
+            const totalCirculatingSupply = crypto.circulating_supply;
 
             return (
               <Tr key={index}>
@@ -93,12 +93,13 @@ const CryptoList = ({ cryptos, isFetching }) => {
                         >
                           {name}
                         </Text>
-                        <Stack direction="row" spacing={1} color={ligthColor}>
+                        <Flex align="center" color={ligthColor}>
                           <Hide above="md">
                             <Text
                               as="span"
                               bg={labelBg}
                               px={1}
+                              mr={1}
                               fontSize="xs"
                               borderRadius="base"
                             >
@@ -114,7 +115,7 @@ const CryptoList = ({ cryptos, isFetching }) => {
                           >
                             {symbol}
                           </Text>
-                        </Stack>
+                        </Flex>
                       </Flex>
                     </Flex>
                   </Skeleton>
@@ -126,49 +127,75 @@ const CryptoList = ({ cryptos, isFetching }) => {
                 </Td>
                 <Td isNumeric>
                   <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    <Text color={oneHPercentage > 0 ? 'green.400' : 'red.500'}>
-                      {oneHPercentage.toFixed(2) || '0.00'}%
-                    </Text>
-                  </Skeleton>
-                </Td>
-                <Td isNumeric>
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    <Text
-                      color={
-                        twentyFourHPercentage > 0 ? 'green.400' : 'red.500'
-                      }
-                    >
-                      {twentyFourHPercentage.toFixed(2) || '0.00'}%
-                    </Text>
-                  </Skeleton>
-                </Td>
-                <Td isNumeric>
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    <Text
-                      color={sevenDayPercentage > 0 ? 'green.400' : 'red.500'}
-                    >
-                      {sevenDayPercentage.toFixed(2) || '0.00'}%
-                    </Text>
-                  </Skeleton>
-                </Td>
-                <Td isNumeric>
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    <Text>${formatNumber(marketCap)}</Text>
-                  </Skeleton>
-                </Td>
-                <Td isNumeric>
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    <Text>${formatNumber(totalVol)}</Text>
-                  </Skeleton>
-                </Td>
-                <Td isNumeric>
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    <Text noOfLines={1}>
-                      {formatNumber(totalCirculatingSupply)}
-                      <Text as="span" casing="uppercase" whiteSpace="normal">
-                        &nbsp;{symbol}
+                    {oneHPercentage ? (
+                      <Text
+                        color={oneHPercentage > 0 ? 'green.400' : 'red.500'}
+                      >
+                        {oneHPercentage.toFixed(2)}%
                       </Text>
-                    </Text>
+                    ) : (
+                      <Text>?</Text>
+                    )}
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    {twentyFourHPercentage ? (
+                      <Text
+                        color={
+                          twentyFourHPercentage > 0 ? 'green.400' : 'red.500'
+                        }
+                      >
+                        {twentyFourHPercentage.toFixed(2)}%
+                      </Text>
+                    ) : (
+                      <Text>?</Text>
+                    )}
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    {sevenDayPercentage ? (
+                      <Text
+                        color={sevenDayPercentage > 0 ? 'green.400' : 'red.500'}
+                      >
+                        {sevenDayPercentage.toFixed(2)}%
+                      </Text>
+                    ) : (
+                      <Text>?</Text>
+                    )}
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    {marketCap ? (
+                      <Text>${formatNumber(marketCap)}</Text>
+                    ) : (
+                      <Text>?</Text>
+                    )}
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    {totalVol ? (
+                      <Text>${formatNumber(totalVol)}</Text>
+                    ) : (
+                      <Text>?</Text>
+                    )}
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    {totalCirculatingSupply ? (
+                      <Text noOfLines={1}>
+                        {formatNumber(totalCirculatingSupply)}
+                        <Text as="span" casing="uppercase" whiteSpace="normal">
+                          &nbsp;{symbol}
+                        </Text>
+                      </Text>
+                    ) : (
+                      <Text>?</Text>
+                    )}
                   </Skeleton>
                 </Td>
               </Tr>
