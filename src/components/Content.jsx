@@ -1,31 +1,21 @@
-import React from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Spinner, Center, Skeleton, SkeletonText } from '@chakra-ui/react';
-import { Heading, Stack, Text } from '@chakra-ui/layout';
+import { Flex, Heading, Stack, Text } from '@chakra-ui/layout';
 import {
   useGetCryptoMarketQuery,
   useGetGlobalDataQuery,
 } from '../services/cryptoApi';
 import { useBreakpointValue } from '@chakra-ui/media-query';
-import { usePagination } from '@ajna/pagination';
-import Pagination from './CryptoPagination';
 import CryptoList from './CryptoList';
 import { convertToAdaptiveNumberString } from '../helpers';
+import Pagination from '@choc-ui/paginator';
 
 const Content = () => {
   const emptyColor = useColorModeValue('gray.200', 'gray.800');
-  const inner = useBreakpointValue({ base: 1, md: 2 });
-  const { pages, pagesCount, currentPage, setCurrentPage } = usePagination({
-    total: 12978,
-    limits: {
-      outer: 1,
-      inner: inner,
-    },
-    initialState: {
-      pageSize: 100,
-      currentPage: 1,
-    },
-  });
+  const buttonBg = useColorModeValue('white', 'gray.900');
+  const pageNeighbours = useBreakpointValue({ base: 1, md: 2 });
+  const [currentPage, setCurrentPage] = useState(1);
   const {
     data: cryptos,
     isFetching,
@@ -34,11 +24,10 @@ const Content = () => {
   const { data: global, isLoading: isGlobalDataLoading } =
     useGetGlobalDataQuery();
 
-  const globalData = {
-    total_market_cap: global?.data?.total_market_cap.usd ?? 0.0,
-    market_cap_change:
-      global?.data?.market_cap_change_percentage_24h_usd ?? 0.0,
-  };
+  const totalItems = global?.data?.active_cryptocurrencies ?? 1200;
+  const marketCap = global?.data?.total_market_cap.usd ?? 0.0;
+  const marketCapChange =
+    global?.data?.market_cap_change_percentage_24h_usd ?? 0.0;
 
   return (
     <Stack minH="100vh" maxW="7xl" mx="auto" px={4} py={6}>
@@ -61,11 +50,11 @@ const Content = () => {
           >
             {'The global crypto market cap is '}
             <Text as="span" fontWeight="semibold">
-              ${convertToAdaptiveNumberString(globalData.total_market_cap)}
+              ${convertToAdaptiveNumberString(marketCap)}
             </Text>
             {', a '}
             <Text as="span" color="red.500" fontWeight="semibold">
-              {globalData.market_cap_change.toFixed(2)}%
+              {marketCapChange.toFixed(2)}%
             </Text>
             {` change in the last 24 hours.`}
           </Text>
@@ -84,13 +73,24 @@ const Content = () => {
       ) : (
         <>
           <CryptoList cryptos={cryptos} isFetching={isFetching} />
-          <Pagination
-            itemsPerPage={2}
-            pages={pages}
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+          <Flex w="full" py={6} alignItems="center" justifyContent="center">
+            <Pagination
+              size="sm"
+              total={totalItems}
+              pageSize={100}
+              paginationProps={{ display: 'flex', alignItems: 'center' }}
+              current={currentPage}
+              onChange={(page) => setCurrentPage(page)}
+              pageNeighbours={pageNeighbours}
+              baseStyles={{
+                h: '32px',
+                minW: '32px',
+                p: 0,
+                mx: '2px',
+                bg: buttonBg,
+              }}
+            />
+          </Flex>
         </>
       )}
     </Stack>

@@ -58,7 +58,7 @@ export const theme = extendTheme({
           td: {
             height: '5rem',
             fontSize: '0.875rem',
-            fontWeight: 'medium',
+            fontWeight: 'semibold',
             borderBottom: '1px',
             borderColor: mode('gray.100', 'gray.700')(props),
             '&[data-is-numeric=true]': {

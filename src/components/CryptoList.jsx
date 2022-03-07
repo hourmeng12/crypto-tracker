@@ -17,7 +17,7 @@ import { formatNumber } from '../helpers';
 const CryptoList = ({ cryptos, isFetching }) => {
   const bg = useColorModeValue('white', 'gray.900');
   const labelBg = useColorModeValue('gray.200', 'gray.800');
-  const ligthColor = useColorModeValue('gray.600', 'gray.200');
+  const ligthColor = useColorModeValue('gray.500', 'gray.200');
 
   return (
     <Box overflowX="auto" className="hide-scroll">
@@ -26,7 +26,7 @@ const CryptoList = ({ cryptos, isFetching }) => {
           <Tr>
             <Hide below="md">
               <Th bg={bg} pos="sticky" left="0" isNumeric zIndex="docked">
-                #
+                <Text as="span">#</Text>
               </Th>
             </Hide>
             <Th bg={bg} pos="sticky" left={[0, 0, '38px']} minW="8.75rem">
@@ -38,36 +38,34 @@ const CryptoList = ({ cryptos, isFetching }) => {
             <Th isNumeric>7d %</Th>
             <Th isNumeric>Market Cap</Th>
             <Th isNumeric>Volume(24h)</Th>
-            <Th w="auto" isNumeric>
-              Circulating Supply
-            </Th>
+            <Th isNumeric>Circulating Supply</Th>
           </Tr>
         </Thead>
         <Tbody>
           {cryptos.map((crypto, index) => {
-            const crytoData = {
-              market_cap_rank: crypto?.market_cap_rank ?? 0,
-              image: crypto?.image.replace('/large/', '/thumb/'),
-              name: crypto?.name ?? '',
-              symbol: crypto?.symbol ?? '',
-              current_price: crypto?.current_price ?? 0,
-              oneHPercentage:
-                crypto?.price_change_percentage_1h_in_currency ?? 0,
-              twentyFourHPercentage:
-                crypto?.price_change_percentage_24h_in_currency ?? 0,
-              sevenDayPercentage:
-                crypto?.price_change_percentage_7d_in_currency ?? 0,
-              market_cap: crypto?.market_cap ?? 0,
-              total_vol: crypto?.total_volume ?? 0,
-              total_circulating_supply: crypto.circulating_supply ?? 0,
-            };
+            const marketCapRank = crypto?.market_cap_rank ?? 0;
+            const image = crypto?.image.replace('/large/', '/thumb/');
+            const name = crypto?.name ?? '';
+            const symbol = crypto?.symbol ?? '';
+            const currentPrice = crypto?.current_price ?? 0;
+            const oneHPercentage =
+              crypto?.price_change_percentage_1h_in_currency ?? 0;
+            const twentyFourHPercentage =
+              crypto?.price_change_percentage_24h_in_currency ?? 0;
+            const sevenDayPercentage =
+              crypto?.price_change_percentage_7d_in_currency ?? 0;
+            const marketCap = crypto?.market_cap ?? 0;
+            const totalVol = crypto?.total_volume ?? 0;
+            const totalCirculatingSupply = crypto.circulating_supply ?? 0;
 
             return (
               <Tr key={index}>
                 <Hide below="md">
                   <Td className="hide" bg={bg} pos="sticky" left="0" isNumeric>
                     <Skeleton isLoaded={!isFetching} borderRadius="md">
-                      {crytoData.market_cap_rank}
+                      <Text as="span" color={ligthColor}>
+                        {marketCapRank}
+                      </Text>
                     </Skeleton>
                   </Td>
                 </Hide>
@@ -80,94 +78,96 @@ const CryptoList = ({ cryptos, isFetching }) => {
                 >
                   <Skeleton isLoaded={!isFetching} borderRadius="md">
                     <Flex align="center">
-                      <Image
-                        mr={4}
-                        boxSize="24px"
-                        src={crytoData.image}
-                        alt={crytoData.name}
-                      />
+                      <Image mr={4} boxSize="24px" src={image} alt={name} />
                       <Flex
                         direction={['column', 'column', 'row']}
                         align={['start', 'start', 'center']}
                       >
                         <Text
+                          as="span"
                           mr={2}
-                          fontWeight="semibold"
                           casing="capitalize"
+                          noOfLines={3}
                           whiteSpace={['normal', 'normal', 'nowrap']}
                           wordBreak={['break-word', 'break-word', 'initial']}
                         >
-                          {crytoData.name}
+                          {name}
                         </Text>
                         <Stack direction="row" spacing={1} color={ligthColor}>
                           <Hide above="md">
                             <Text
+                              as="span"
                               bg={labelBg}
                               px={1}
                               fontSize="xs"
                               borderRadius="base"
                             >
-                              {crytoData.market_cap_rank}
+                              {marketCapRank}
                             </Text>
                           </Hide>
-                          <Text fontSize={['xs', 'sm']} casing="uppercase">
-                            {crytoData.symbol}
+                          <Text
+                            as="span"
+                            noOfLines={2}
+                            fontSize={['xs', 'sm']}
+                            casing="uppercase"
+                            whiteSpace="normal"
+                          >
+                            {symbol}
                           </Text>
                         </Stack>
                       </Flex>
                     </Flex>
                   </Skeleton>
                 </Td>
-                <Td pl={[0, '10px']} isNumeric>
+                <Td pl={['0px', '10px']} isNumeric>
                   <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    ${formatNumber(crytoData.current_price)}
-                  </Skeleton>
-                </Td>
-                <Td
-                  color={crytoData.oneHPercentage > 0 ? 'green.400' : 'red.500'}
-                  isNumeric
-                >
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    {crytoData.oneHPercentage.toFixed(2) || '0.00'}%
-                  </Skeleton>
-                </Td>
-                <Td
-                  color={
-                    crytoData.twentyFourHPercentage > 0
-                      ? 'green.400'
-                      : 'red.500'
-                  }
-                  isNumeric
-                >
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    {crytoData.twentyFourHPercentage.toFixed(2) || '0.00'}%
-                  </Skeleton>
-                </Td>
-                <Td
-                  color={
-                    crytoData.sevenDayPercentage > 0 ? 'green.400' : 'red.500'
-                  }
-                  isNumeric
-                >
-                  <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    {crytoData.sevenDayPercentage.toFixed(2) || '0.00'}%
+                    ${formatNumber(currentPrice)}
                   </Skeleton>
                 </Td>
                 <Td isNumeric>
                   <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    ${formatNumber(crytoData.market_cap)}
+                    <Text color={oneHPercentage > 0 ? 'green.400' : 'red.500'}>
+                      {oneHPercentage.toFixed(2) || '0.00'}%
+                    </Text>
                   </Skeleton>
                 </Td>
                 <Td isNumeric>
                   <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    ${formatNumber(crytoData.total_vol)}
+                    <Text
+                      color={
+                        twentyFourHPercentage > 0 ? 'green.400' : 'red.500'
+                      }
+                    >
+                      {twentyFourHPercentage.toFixed(2) || '0.00'}%
+                    </Text>
                   </Skeleton>
                 </Td>
                 <Td isNumeric>
                   <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    {formatNumber(crytoData.total_circulating_supply)}
-                    <Text as="span" casing="uppercase">
-                      &nbsp;{crytoData.symbol}
+                    <Text
+                      color={sevenDayPercentage > 0 ? 'green.400' : 'red.500'}
+                    >
+                      {sevenDayPercentage.toFixed(2) || '0.00'}%
+                    </Text>
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    <Text>${formatNumber(marketCap)}</Text>
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    <Text>${formatNumber(totalVol)}</Text>
+                  </Skeleton>
+                </Td>
+                <Td isNumeric>
+                  <Skeleton isLoaded={!isFetching} borderRadius="md">
+                    <Text noOfLines={1}>
+                      {formatNumber(totalCirculatingSupply)}
+                      <Text as="span" casing="uppercase" whiteSpace="normal">
+                        &nbsp;{symbol}
+                      </Text>
                     </Text>
                   </Skeleton>
                 </Td>
