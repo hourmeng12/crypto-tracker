@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <Box borderY="1px" borderColor={borderColor}>
       <Flex
-        maxW="7xl"
+        maxW="8xl"
         mx="auto"
         px={4}
         py={2}

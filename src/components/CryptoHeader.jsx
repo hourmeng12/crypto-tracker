@@ -12,7 +12,7 @@ const CryptoHeader = () => {
     global?.data?.market_cap_change_percentage_24h_usd ?? 0.0;
 
   return (
-    <Stack mb={6} spacing={2}>
+    <Stack spacing={2}>
       <Skeleton maxW="2xl" isLoaded={!isLoading} borderRadius="md">
         <Heading as="h1" fontSize={['md', 'lg', 'xl', '2xl']}>
           Cryptocurrency Prices by Market Cap

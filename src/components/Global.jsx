@@ -24,7 +24,7 @@ const Global = () => {
 
   return (
     <Flex
-      maxW="7xl"
+      maxW="8xl"
       mx="auto"
       px={4}
       py={1}

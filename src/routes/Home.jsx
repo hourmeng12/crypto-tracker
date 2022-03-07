@@ -11,6 +11,7 @@ import Pagination from '@choc-ui/paginator';
 import CryptoList from '../components/CryptoList';
 import ApiAttribution from '../components/ApiAttribution';
 import CryptoHeader from '../components/CryptoHeader';
+import CryptoNews from '../components/CryptoNews';
 
 const Home = () => {
   const emptyColor = useColorModeValue('gray.200', 'gray.800');
@@ -27,7 +28,8 @@ const Home = () => {
   const totalItems = global?.data?.active_cryptocurrencies ?? 1000;
 
   return (
-    <Stack minH="100vh" maxW="7xl" mx="auto" px={4} py={6}>
+    <Stack spacing={8} minH="100vh" maxW="8xl" mx="auto" px={4} py={6}>
+      <CryptoNews />
       <CryptoHeader />
       {isLoading ? (
         <Center py={12}>
