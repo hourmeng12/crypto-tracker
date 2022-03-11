@@ -1,4 +1,4 @@
-const convertToAdaptiveNumberString = (value) => {
+const convertToAdaptiveNumberString = (value = 0) => {
   // Nine Zeroes for Billions
   return Math.abs(Number(value)) >= 1.0e9
     ? (Math.abs(Number(value)) / 1.0e12).toFixed(2) + 'T'

@@ -1,5 +1,5 @@
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { Box } from '@chakra-ui/layout';
+import { Box, Container } from '@chakra-ui/layout';
 import React from 'react';
 import { Outlet } from 'react-router';
 import Global from './Global';
@@ -18,7 +18,9 @@ const Layout = () => {
         <Header />
       </Box>
       <Box bgGradient={contentBg}>
-        <Outlet />
+        <Container maxW="8xl" minH="89vh" px={4} py={6}>
+          <Outlet />
+        </Container>
       </Box>
     </>
   );

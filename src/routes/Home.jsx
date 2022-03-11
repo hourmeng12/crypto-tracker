@@ -1,68 +1,87 @@
-import React, { useState } from 'react';
-import { useColorModeValue } from '@chakra-ui/color-mode';
-import { Spinner, Center } from '@chakra-ui/react';
-import { Flex, Stack } from '@chakra-ui/layout';
+import React from 'react';
 import {
   useGetCryptoMarketQuery,
   useGetGlobalDataQuery,
 } from '../services/cryptoApi';
-import { useBreakpointValue } from '@chakra-ui/media-query';
-import Pagination from '@choc-ui/paginator';
+import { useColorModeValue } from '@chakra-ui/color-mode';
+import { Flex, Heading, Link, Stack, Text } from '@chakra-ui/layout';
+import { Alert, AlertIcon } from '@chakra-ui/alert';
+import { Skeleton, SkeletonText } from '@chakra-ui/skeleton';
+import { usePagination } from '../hooks';
+import { convertToAdaptiveNumberString } from '../helpers';
 import CryptoList from '../components/CryptoList';
-import ApiAttribution from '../components/ApiAttribution';
-import CryptoHeader from '../components/CryptoHeader';
-import CryptoNews from '../components/CryptoNews';
+import LoadingSpinner from '../components/LoadingSpinner';
+import CryptoPagination from '../components/CryptoPagination';
 
 const Home = () => {
-  const emptyColor = useColorModeValue('gray.200', 'gray.800');
-  const buttonBg = useColorModeValue('white', 'gray.900');
-  const pageNeighbours = useBreakpointValue({ base: 1, md: 2 });
-  const [currentPage, setCurrentPage] = useState(1);
-
+  const [currentPage, setCurrentPage] = usePagination();
   const {
     data: cryptos,
     isFetching,
     isLoading,
   } = useGetCryptoMarketQuery(currentPage);
-  const { data: global } = useGetGlobalDataQuery();
+  const { data: global, isLoading: isGlobalLoading } = useGetGlobalDataQuery();
   const totalItems = global?.data?.active_cryptocurrencies ?? 1000;
+  const marketCap = global?.data?.total_market_cap.usd ?? 0.0;
+  const marketCapChange =
+    global?.data?.market_cap_change_percentage_24h_usd ?? 0.0;
+  const color = useColorModeValue('green.800', 'green.100');
 
   return (
-    <Stack spacing={8} minH="100vh" maxW="8xl" mx="auto" px={4} py={6}>
-      <CryptoNews />
-      <CryptoHeader />
+    <Stack spacing={8}>
+      <Stack spacing={2}>
+        <Skeleton maxW="2xl" isLoaded={!isGlobalLoading} borderRadius="md">
+          <Heading as="h1" fontSize={['md', 'lg', 'xl', '2xl']}>
+            Cryptocurrency Prices by Market Cap
+          </Heading>
+        </Skeleton>
+
+        <SkeletonText
+          mt={8}
+          noOfLines={2}
+          isLoaded={!isGlobalLoading}
+          borderRadius="md"
+        >
+          <Text
+            color={useColorModeValue('gray.500', 'gray.400')}
+            fontSize={['sm', 'md']}
+          >
+            {'The global crypto market cap is '}
+            <Text as="span" fontWeight="semibold">
+              ${convertToAdaptiveNumberString(marketCap)}
+            </Text>
+            {', a '}
+            <Text as="span" color="red.500" fontWeight="semibold">
+              {marketCapChange.toFixed(2)}%
+            </Text>
+            {` change in the last 24 hours.`}
+          </Text>
+        </SkeletonText>
+      </Stack>
       {isLoading ? (
-        <Center py={12}>
-          <Spinner
-            thickness="5px"
-            speed="0.65s"
-            emptyColor={emptyColor}
-            color="brand.500"
-            size="xl"
-          />
-        </Center>
+        <LoadingSpinner minH="50vh" />
       ) : (
         <>
           <CryptoList cryptos={cryptos} isFetching={isFetching} />
           <Flex w="full" py={6} alignItems="center" justifyContent="center">
-            <Pagination
-              size="sm"
-              total={totalItems}
-              pageSize={100}
-              paginationProps={{ display: 'flex', alignItems: 'center' }}
-              current={currentPage}
-              onChange={(page) => setCurrentPage(page)}
-              pageNeighbours={pageNeighbours}
-              baseStyles={{
-                h: '32px',
-                minW: '32px',
-                p: 0,
-                mx: '2px',
-                bg: buttonBg,
-              }}
+            <CryptoPagination
+              totalItems={totalItems}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
             />
           </Flex>
-          <ApiAttribution />
+          <Alert status="success" fontSize="sm" borderRadius="md">
+            <AlertIcon />
+            Api provided by&nbsp;
+            <Link
+              fontWeight="semibold"
+              color={color}
+              href="https://www.coingecko.com/"
+              isExternal
+            >
+              CoinGecko
+            </Link>
+          </Alert>
         </>
       )}
     </Stack>

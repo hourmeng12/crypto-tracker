@@ -9,15 +9,18 @@ import {
   Image,
   Skeleton,
   Hide,
+  LinkBox,
 } from '@chakra-ui/react';
-import { Box, Flex, Text } from '@chakra-ui/layout';
+import { Box, Flex, LinkOverlay, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { formatNumber } from '../helpers';
+import { Link as RouterLink } from 'react-router-dom';
 
 const CryptoList = ({ cryptos, isFetching }) => {
   const bg = useColorModeValue('white', 'gray.900');
   const labelBg = useColorModeValue('gray.200', 'gray.800');
   const ligthColor = useColorModeValue('gray.500', 'gray.200');
+  const hoverBg = useColorModeValue('gray.50', 'gray.800');
 
   return (
     <Box overflowX="auto" className="hide-scroll">
@@ -59,9 +62,16 @@ const CryptoList = ({ cryptos, isFetching }) => {
             const totalCirculatingSupply = crypto.circulating_supply;
 
             return (
-              <Tr key={index}>
+              <Tr key={index} role="group" _hover={{ bgColor: hoverBg }}>
                 <Hide below="md">
-                  <Td className="hide" bg={bg} pos="sticky" left="0" isNumeric>
+                  <Td
+                    className="hide"
+                    bg={bg}
+                    pos="sticky"
+                    left="0"
+                    _groupHover={{ bgColor: hoverBg }}
+                    isNumeric
+                  >
                     <Skeleton isLoaded={!isFetching} borderRadius="md">
                       <Text as="span" color={ligthColor}>
                         {marketCapRank}
@@ -70,6 +80,7 @@ const CryptoList = ({ cryptos, isFetching }) => {
                   </Td>
                 </Hide>
                 <Td
+                  _groupHover={{ bgColor: hoverBg }}
                   bg={bg}
                   pos="sticky"
                   px={['4px', '10px']}
@@ -77,47 +88,58 @@ const CryptoList = ({ cryptos, isFetching }) => {
                   zIndex="banner"
                 >
                   <Skeleton isLoaded={!isFetching} borderRadius="md">
-                    <Flex align="center">
-                      <Image mr={4} boxSize="24px" src={image} alt={name} />
-                      <Flex
-                        direction={['column', 'column', 'row']}
-                        align={['start', 'start', 'center']}
-                      >
-                        <Text
-                          as="span"
-                          mr={2}
-                          casing="capitalize"
-                          noOfLines={3}
-                          whiteSpace={['normal', 'normal', 'nowrap']}
-                          wordBreak={['break-word', 'break-word', 'initial']}
+                    <LinkBox>
+                      <Flex align="center">
+                        <Image mr={4} boxSize="24px" src={image} alt={name} />
+                        <Flex
+                          direction={['column', 'column', 'row']}
+                          align={['start', 'start', 'center']}
                         >
-                          {name}
-                        </Text>
-                        <Flex align="center" color={ligthColor}>
-                          <Hide above="md">
+                          <LinkOverlay
+                            as={RouterLink}
+                            to={`/cryptocurrencies/${crypto.id}`}
+                          >
                             <Text
                               as="span"
-                              bg={labelBg}
-                              px={1}
-                              mr={1}
-                              fontSize="xs"
-                              borderRadius="base"
+                              mr={2}
+                              casing="capitalize"
+                              noOfLines={3}
+                              whiteSpace={['normal', 'normal', 'nowrap']}
+                              wordBreak={[
+                                'break-word',
+                                'break-word',
+                                'initial',
+                              ]}
                             >
-                              {marketCapRank}
+                              {name}
                             </Text>
-                          </Hide>
-                          <Text
-                            as="span"
-                            noOfLines={2}
-                            fontSize={['xs', 'sm']}
-                            casing="uppercase"
-                            whiteSpace="normal"
-                          >
-                            {symbol}
-                          </Text>
+                          </LinkOverlay>
+                          <Flex align="center" color={ligthColor}>
+                            <Hide above="md">
+                              <Text
+                                as="span"
+                                bg={labelBg}
+                                px={1}
+                                mr={1}
+                                fontSize="xs"
+                                borderRadius="base"
+                              >
+                                {marketCapRank}
+                              </Text>
+                            </Hide>
+                            <Text
+                              as="span"
+                              noOfLines={2}
+                              fontSize={['xs', 'sm']}
+                              casing="uppercase"
+                              whiteSpace="normal"
+                            >
+                              {symbol}
+                            </Text>
+                          </Flex>
                         </Flex>
                       </Flex>
-                    </Flex>
+                    </LinkBox>
                   </Skeleton>
                 </Td>
                 <Td pl={['0px', '10px']} isNumeric>
