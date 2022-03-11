@@ -13,7 +13,19 @@ export const cryptoApi = createApi({
     getGlobalData: builder.query({
       query: () => `global`,
     }),
+    getSingleCrypto: builder.query({
+      query: (cryptoId) => `coins/${cryptoId}`,
+    }),
+    getSingleCryptoHistorical: builder.query({
+      query: (cryptoId) =>
+        `coins/${cryptoId}/market_chart?vs_currency=usd&days=1`,
+    }),
   }),
 });
 
-export const { useGetCryptoMarketQuery, useGetGlobalDataQuery } = cryptoApi;
+export const {
+  useGetCryptoMarketQuery,
+  useGetGlobalDataQuery,
+  useGetSingleCryptoQuery,
+  useGetSingleCryptoHistoricalQuery,
+} = cryptoApi;
