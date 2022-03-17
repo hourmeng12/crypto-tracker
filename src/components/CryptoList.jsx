@@ -19,7 +19,7 @@ import { Link as RouterLink } from 'react-router-dom';
 const CryptoList = ({ cryptos, isFetching }) => {
   const bg = useColorModeValue('white', 'gray.900');
   const labelBg = useColorModeValue('gray.200', 'gray.800');
-  const ligthColor = useColorModeValue('gray.500', 'gray.200');
+  const lightColor = useColorModeValue('gray.500', 'gray.200');
   const hoverBg = useColorModeValue('gray.50', 'gray.800');
 
   return (
@@ -73,7 +73,7 @@ const CryptoList = ({ cryptos, isFetching }) => {
                     isNumeric
                   >
                     <Skeleton isLoaded={!isFetching} borderRadius="md">
-                      <Text as="span" color={ligthColor}>
+                      <Text as="span" color={lightColor}>
                         {marketCapRank}
                       </Text>
                     </Skeleton>
@@ -114,7 +114,7 @@ const CryptoList = ({ cryptos, isFetching }) => {
                               {name}
                             </Text>
                           </LinkOverlay>
-                          <Flex align="center" color={ligthColor}>
+                          <Flex align="center" color={lightColor}>
                             <Hide above="md">
                               <Text
                                 as="span"
