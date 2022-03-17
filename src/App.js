@@ -4,14 +4,15 @@ import Home from './routes/Home';
 import Crypto from './routes/Crypto';
 import { Navigate, useLocation } from 'react-router';
 import { useScrollToTop } from './hooks';
+import NotFound from './routes/NotFound';
 
 function App() {
   useScrollToTop();
   const location = useLocation();
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
         <Route path="cryptocurrencies">
           <Route
             index
@@ -19,6 +20,7 @@ function App() {
           />
           <Route path=":cryptoId" element={<Crypto />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
