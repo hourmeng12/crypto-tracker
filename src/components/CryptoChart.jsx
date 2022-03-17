@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -11,6 +11,10 @@ import {
   Legend,
 } from 'chart.js';
 import { Box } from '@chakra-ui/layout';
+import { Button, ButtonGroup } from '@chakra-ui/button';
+import { useColorModeValue } from '@chakra-ui/color-mode';
+import { useGetSingleCryptoHistoricalQuery } from '../services/cryptoApi';
+import LoadingSpinner from './LoadingSpinner';
 
 ChartJS.register(
   CategoryScale,
@@ -22,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-const options = {
+const chartOptions = {
   scales: {
     x: {
       grid: {
@@ -46,16 +50,49 @@ const options = {
   },
 };
 
-const CryptoChart = ({ cryptoData }) => {
-  const data = {
-    labels: cryptoData.prices.map((coin) => {
-      let date = new Date(coin[0]);
-      return date.toLocaleDateString();
-    }),
+const daysButton = [
+  {
+    text: '1D',
+    value: 1,
+  },
+  {
+    text: '7D',
+    value: 7,
+  },
+  {
+    text: '14D',
+    value: 14,
+  },
+  {
+    text: '1M',
+    value: 30,
+  },
+  {
+    text: '3M',
+    value: 90,
+  },
+];
+
+const CryptoChart = ({ cryptoId }) => {
+  const [days, setDays] = useState(1);
+  const { data, isFetching } = useGetSingleCryptoHistoricalQuery({
+    cryptoId,
+    days,
+  });
+  const cryptoHistoryPrices = data?.prices ?? [];
+  const chartData = {
+    labels:
+      cryptoHistoryPrices.length > 0 &&
+      cryptoHistoryPrices.map((coin) => {
+        let date = new Date(coin[0]);
+        return date.toLocaleDateString();
+      }),
 
     datasets: [
       {
-        data: cryptoData.prices.map((coin) => coin[1]),
+        data:
+          cryptoHistoryPrices.length > 0 &&
+          cryptoHistoryPrices.map((coin) => coin[1]),
         label: `Price`,
         borderColor: '#8894ff',
         backgroundColor: '#fff',
@@ -65,10 +102,38 @@ const CryptoChart = ({ cryptoData }) => {
       },
     ],
   };
+
+  const bg = useColorModeValue('gray.100', 'gray.700');
+
   return (
-    <Box pos="relative" overflow="hidden">
-      <Line data={data} options={options} />
-    </Box>
+    <>
+      <ButtonGroup
+        mb={6}
+        p={1}
+        direction="row"
+        spacing={0}
+        variant="select"
+        size="sm"
+        bg={bg}
+        borderRadius="lg"
+      >
+        {daysButton.map((day) => (
+          <Button
+            key={day.value}
+            isActive={days === day.value}
+            onClick={() => setDays(day.value)}
+          >
+            {day.text}
+          </Button>
+        ))}
+      </ButtonGroup>
+      {!isFetching && (
+        <Box pos="relative" overflow="hidden">
+          <Line data={chartData} options={chartOptions} />
+        </Box>
+      )}
+      {isFetching && <LoadingSpinner py={28} />}
+    </>
   );
 };
 

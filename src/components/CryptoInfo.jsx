@@ -15,7 +15,7 @@ import { useColorModeValue } from '@chakra-ui/color-mode';
 import { formatNumber } from '../helpers';
 import CryptoChart from './CryptoChart';
 
-export const CryptoInfo = ({ crypto, historical }) => {
+export const CryptoInfo = ({ crypto }) => {
   const marketData = crypto?.market_data;
   const currentPrice = marketData?.current_price.usd;
   const percentage =
@@ -69,7 +69,7 @@ export const CryptoInfo = ({ crypto, historical }) => {
               borderRadius="lg"
               as="span"
             >
-              {percentage ? `$${percentage.toFixed(1)}` : '?'}
+              {percentage ? `${percentage.toFixed(1)}%` : '?'}
             </Text>
           </Stack>
         </Stack>
@@ -80,7 +80,7 @@ export const CryptoInfo = ({ crypto, historical }) => {
           <Heading mb={6} as="h3" size="md">
             {crypto.name} to USD Chart
           </Heading>
-          <CryptoChart cryptoData={historical} />
+          <CryptoChart cryptoId={crypto.id} />
         </GridItem>
         <GridItem
           ml={{ base: -4, md: 4, lg: 0 }}

@@ -19,6 +19,19 @@ export const theme = extendTheme({
     },
   },
   components: {
+    Button: {
+      variants: {
+        select: (props) => ({
+          bg: 'transparent',
+          _hover: {
+            bg: mode('white', 'gray.800')(props),
+          },
+          _active: {
+            bg: mode('white', 'gray.800')(props),
+          },
+        }),
+      },
+    },
     Heading: {
       variants: {
         heading: {
