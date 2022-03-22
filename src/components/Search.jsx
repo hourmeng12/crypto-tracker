@@ -25,6 +25,7 @@ const Search = () => {
   const navigate = useNavigate();
 
   const lightColor = useColorModeValue('gray.500', 'gray.200');
+  const iconColor = useColorModeValue('gray.400', 'gray.600');
 
   useEffect(() => {
     setIsEmpty(false);
@@ -63,7 +64,7 @@ const Search = () => {
         <InputGroup>
           <AutoCompleteInput
             variant="filled"
-            placeholder="Enter city or state..."
+            placeholder="Search"
             value={inputValue}
             onChange={(event) => {
               setInputValue(event.target.value);
@@ -71,7 +72,7 @@ const Search = () => {
           />
           <InputRightElement
             bg="transparent"
-            children={<SearchIcon color="gray.400" />}
+            children={<SearchIcon color={iconColor} />}
           />
         </InputGroup>
         <AutoCompleteList>

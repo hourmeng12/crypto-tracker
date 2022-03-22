@@ -7,17 +7,13 @@ import Header from './Header';
 
 const Layout = () => {
   const bg = useColorModeValue('white', 'gray.900');
-  const contentBg = useColorModeValue(
-    'linear(to-b, gray.50 0%, white 2%)',
-    'linear(to-b, gray.800 0%, gray.900 2%)'
-  );
   return (
     <>
       <Box bg={bg}>
         <Global />
         <Header />
       </Box>
-      <Box bgGradient={contentBg}>
+      <Box bg={bg}>
         <Container maxW="8xl" minH="89vh" px={4} py={6}>
           <Outlet />
         </Container>

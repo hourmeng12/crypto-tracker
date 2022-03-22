@@ -3,13 +3,15 @@ import {
   Box,
   Flex,
   Heading,
-  HStack,
   LinkBox,
   LinkOverlay,
+  Stack,
 } from '@chakra-ui/layout';
 import Search from './Search';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Link as RouterLink } from 'react-router-dom';
+import { Image } from '@chakra-ui/react';
+import Logo from '../assets/logo.png';
 
 const Header = () => {
   const borderColor = useColorModeValue('gray.100', 'gray.800');
@@ -25,14 +27,22 @@ const Header = () => {
       >
         <LinkBox>
           <LinkOverlay as={RouterLink} to="/">
-            <Heading as="h1" size="md" fontWeight="medium">
-              Crypto Tracker
-            </Heading>
+            <Stack direction="row" align="center">
+              <Image boxSize="30px" src={Logo} />
+              <Heading
+                as="h1"
+                size={['sm', 'md', 'lg']}
+                fontWeight="bold"
+                color="brand.500"
+              >
+                Crypto Tracker
+              </Heading>
+            </Stack>
           </LinkOverlay>
         </LinkBox>
-        <HStack maxW={['50%', 'full']}>
+        <Stack maxW={['50%', 'full']}>
           <Search />
-        </HStack>
+        </Stack>
       </Flex>
     </Box>
   );
