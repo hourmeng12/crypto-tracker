@@ -85,12 +85,13 @@ const Search = () => {
                   fontSize="sm"
                   fontWeight="medium"
                   noOfLines={3}
-                  mr={2}
+                  wordBreak="break-word"
+                  mr={1}
                 >
                   {coin.name}
                 </Text>
                 <Text
-                  flex="1 1 20%"
+                  flex="1 0 16%"
                   as="span"
                   casing="uppercase"
                   fontSize="xs"
